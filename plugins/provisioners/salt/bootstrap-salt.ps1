@@ -7,11 +7,6 @@ if (Test-Path C:\tmp\minion.pem) {
   cp C:\tmp\minion.pub C:\salt\conf\pki\minion\
 }
 
-# Check if minion config has been uploaded
-if (Test-Path C:\tmp\minion) {
-  cp C:\tmp\minion C:\salt\conf\
-}
-
 # Detect architecture
 if ([IntPtr]::Size -eq 4) {
   $arch = "win32"
@@ -29,6 +24,11 @@ $webclient.DownloadFile($url, $file)
 # Install minion silently
 Write-Host "Installing Salt minion..."
 C:\tmp\salt.exe /S
+
+# Check if minion config has been uploaded
+if (Test-Path C:\tmp\minion) {
+  cp C:\tmp\minion C:\salt\conf\
+}
 
 # Wait for salt-minion service to be registered before trying to start it
 $service = Get-Service salt-minion -ErrorAction SilentlyContinue
